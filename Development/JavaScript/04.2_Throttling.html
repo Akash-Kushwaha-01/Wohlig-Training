@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Throtting in javascript</title>
+</head>
+<body>
+    <div>
+        <h1>Learning Throtting in javascript </h1>
+        <input type="text" name="searchItems" id="search">
+        <button id="myId" onclick="operation()">Click Here!</button>
+    </div>
+    <script>
+        const myThrottle = (fn, d)=>{
+            return function(...args)
+            {
+                document.getElementById("myId").disabled = true;
+                setTimeout(()=>{
+                    fn();
+                },d); 
+            }
+        }
+         const operation = myThrottle( ()=>{
+            document.getElementById("myId").disabled = false;
+
+            console.log(`User Clicked!`);            
+         },5000)  
+
+    </script>
+</body>
+</html>
