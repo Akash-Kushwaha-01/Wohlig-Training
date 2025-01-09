@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SetTimeOut Revision</title>
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          text-align: center;
+          margin-top: 50px;
+        }
+        #message {
+          font-size: 2rem;
+          color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Learning SetTimeOut Concept</h1>
+    <div id="message">Wait for it...</div>
+    <script>
+        const messageDiv = document.getElementById('message')
+        setTimeout(()=>{
+            messageDiv.textContent = "Ready... 3";
+
+            setTimeout(()=>{
+                messageDiv.textContent = "Set... 2";
+
+
+                setTimeout(()=>{
+                    messageDiv.textContent = "Go....";
+                }, 3000)
+            },2000)
+        }, 1000);
+    </script>
+</body>
+
+</html>
