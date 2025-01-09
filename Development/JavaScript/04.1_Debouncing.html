@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debouncing</title>
+    <style>
+        #search{
+            width : 300px;
+            height : 20px;
+
+        }
+    </style>
+</head>
+<body>
+    <h1>Learning Debouncing in javascript</h1>
+    <label for="search">Search Something.</label>
+    <input type="text" name="SearchBox" id="search" onchange="getData()">
+
+    <script>
+        let counter = 0;
+        getData = () =>{
+            console.log(`Fetching Data..... ${counter++}`);
+            
+        }
+
+        doSomethingMagic = (getData, delay) =>{
+            let timer;
+            return function(...args) // takes the arguments which are came from the user.
+            {
+                if(timer) clearTimeout(timer);
+                setTimeout (()=>{
+                    getData();
+                },d);
+            };
+        };
+        const betterFunction =  doSomethingMagic(getData, 1000);
+    </script>
+</body>
+
+</html>
