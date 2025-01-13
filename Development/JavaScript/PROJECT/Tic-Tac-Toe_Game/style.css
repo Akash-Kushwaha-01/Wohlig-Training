@@ -1,0 +1,44 @@
+.cell{
+    width: 75px;
+    height: 75px;
+    border: 2px solid;
+    box-shadow: 0 0 0 2px;
+    line-height: 75px;
+    font-size: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#game-container{
+    font-family:cursive;
+    text-align: center;
+}
+#cellContainer{
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    width: 225px;
+    margin: auto;
+
+}
+
+#displayResult{
+    text-align: center;
+}
+
+h1{
+    text-align: center;
+}
+
+#reset {
+    display: block; 
+    margin: 20px auto;
+    padding: 10px 20px; 
+    font-size: 16px; 
+    background-color: #007bff; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center; 
+}
