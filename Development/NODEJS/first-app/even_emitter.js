@@ -2,6 +2,7 @@ const EventEmitter =  require('events');
 const emmitter = new EventEmitter();
 
 //Register a listener
+
 // emmitter.on('saved',(arg)=>{
 //     console.log(`A saved event occurred: name: ${arg.name}, id: ${arg.id}`);
     
