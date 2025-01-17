@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { handleGetAllUsers } = require('../controller/user')
-const { handlegetUserById } = require('../controller/user')
+const { handleGetUserById, createUserById, updateUserById, deleteUserById } = require('../controller/user')
 // router.get('/users', (req, res) => {
 //     const html = `
 //     <table border="1" style="border-collapse: collapse; width: 100%;">
@@ -57,7 +57,7 @@ const { handlegetUserById } = require('../controller/user')
 
 router.get("/", handleGetAllUsers);
 
-router.get("/:id", handlegetUserById);
+router.get("/:id", handleGetUserById);
 
 //POST
 
@@ -83,52 +83,10 @@ router.get("/:id", handlegetUserById);
 
 //USING MONDODB: POST
 
-router.post(`/`, async (req, res) => {
-    //TODO: Create new user
-    const body = req.body;
-    if (
-        !body ||
-        !body.first_name ||
-        !body.last_name ||
-        !body.email ||
-        !body.gender ||
-        !body.job_title
-    ) {
-        return res.status(400).json("All fields are required");
-    }
-    const result = await User.create({
-        firstName: body.first_name,
-        lastName: body.last_name,
-        email: body.email,
-        gender: body.gender,
-        jobTitle: body.job_title
-    })
-    console.log(result);
-
-    return res.status(201).json({ msg: "Success" });
-});
-
+router.post("/createUser", createUserById);
 //PUT
 
-router.put("/", (req, res) => {
-    const id = Number(req.params.id); // Convert id to a number
-    const body = req.body;
-    const findUserIndex = users.findIndex((user) => user.id === id); // Find the user index
-    console.log(findUserIndex);
-    if (findUserIndex === -1) {
-        // User not found
-        return res.status(404).json({ error: "User not found" });
-    }
-    // Update the user by merging the old data with new data
-    users[findUserIndex] = { ...users[findUserIndex], ...body };
-    // Save the updated data to the file
-    fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err) => {
-        if (err) {
-            return res.status(500).json({ error: "Failed to update user" });
-        }
-        return res.json({ status: "success", updatedUser: users[findUserIndex] });
-    });
-});
+router.put("/updateUser/:id", updateUserById);
 
 //DELETE
 
@@ -156,9 +114,6 @@ router.put("/", (req, res) => {
 
 // DELETE WITH MONGODB
 
-router.delete("/", async (req, res) => {
-    await User.findByIdAndDelete(req.params.id);
-    return res.json('Success');
-});
+router.delete('/deleteUser/:id', deleteUserById);
 
 module.exports = router

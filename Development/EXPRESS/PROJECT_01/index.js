@@ -11,16 +11,19 @@ const PORT = 8000;
 
 //MiddleWare
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 app.use(logReqRes('log.txt'))
 
 
 
 //CONNECTION:
-connectMongoDB('mongodb://127.0.0.1:27017/project_01')
+connectMongoDB('mongodb://127.0.0.1:27017/project_01').then(() => console.log('MongoDB Connected')
+);
 
 
 //Routes
-app.use('/user', userRouter)
+app.use('/api/user', userRouter)
+
 
 
 app.listen(PORT, () => console.log(`Server started at port: ${PORT}`));
