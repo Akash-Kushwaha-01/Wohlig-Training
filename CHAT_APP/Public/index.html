@@ -1,0 +1,170 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat APP</title>
+  </head>
+  <body>
+    <h1>Chatting</h1>
+
+    <input type="text" id="message" placeholder="Enter Message" />
+    <button id="sendBtn">Send</button>
+
+    <div id="messages"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+      const sendBtn = document.getElementById("sendBtn");
+      const messageInput = document.getElementById("message");
+      const allMessages = document.getElementById("messages");
+
+      socket.on("message", (message) => {
+        const p = document.createElement("p");
+        p.innerText = message;
+        allMessages.appendChild(p);
+      });
+
+      sendBtn.addEventListener("click", (e) => {
+        const message = messageInput.value;
+        socket.emit("user-message", message);
+      });
+    </script>
+  </body>
+</html> -->
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Two-Panel Chat</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSkt80kp3YS7K4//vpLTg2ksdQ7SkvAn1aZc/tpOScz"
+      crossorigin="anonymous"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .chat-panel {
+        height: 60vh;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        background-color: #fff;
+      }
+      .chat-panel p {
+        margin: 5px 0;
+      }
+      .username {
+        font-weight: bold;
+        color: #007bff;
+      }
+      .timestamp {
+        font-size: 0.8rem;
+        color: #6c757d;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container py-5">
+      <h1 class="text-center mb-4">Two-Panel Chat</h1>
+      <div class="row">
+        <!-- Akash's Panel -->
+        <div class="col-md-6">
+          <h4 class="text-center">Akash</h4>
+          <div id="akash-chat" class="chat-panel mb-3"></div>
+          <div class="input-group">
+            <input
+              type="text"
+              id="akash-message"
+              class="form-control"
+              placeholder="Enter your message..."
+            />
+            <button id="akash-send" class="btn btn-primary">Send</button>
+          </div>
+        </div>
+        <!-- Abhijeet's Panel -->
+        <div class="col-md-6">
+          <h4 class="text-center">Abhijeet</h4>
+          <div id="abhijeet-chat" class="chat-panel mb-3"></div>
+          <div class="input-group">
+            <input
+              type="text"
+              id="abhijeet-message"
+              class="form-control"
+              placeholder="Enter your message..."
+            />
+            <button id="abhijeet-send" class="btn btn-success">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Socket.IO -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+
+      // DOM Elements for Akash
+      const akashChat = document.getElementById("akash-chat");
+      const akashMessageInput = document.getElementById("akash-message");
+      const akashSendButton = document.getElementById("akash-send");
+
+      // DOM Elements for Abhijeet
+      const abhijeetChat = document.getElementById("abhijeet-chat");
+      const abhijeetMessageInput = document.getElementById("abhijeet-message");
+      const abhijeetSendButton = document.getElementById("abhijeet-send");
+
+      // Append a message to both panels
+      function appendMessage(username, message, timestamp) {
+        const p = document.createElement("p");
+        p.innerHTML = `
+          <span class="username">${username}:</span>
+          <span>${message}</span>
+          <span class="timestamp">(${timestamp})</span>
+        `;
+        // Append to both panels
+        akashChat.appendChild(p.cloneNode(true));
+        abhijeetChat.appendChild(p);
+        akashChat.scrollTop = akashChat.scrollHeight; // Auto-scroll Akash's panel
+        abhijeetChat.scrollTop = abhijeetChat.scrollHeight; // Auto-scroll Abhijeet's panel
+      }
+
+      // Handle Akash sending a message
+      akashSendButton.addEventListener("click", () => {
+        const message = akashMessageInput.value.trim();
+        if (message) {
+          const timestamp = new Date().toLocaleTimeString();
+          socket.emit("chat-message", { username: "Akash", message, timestamp });
+          akashMessageInput.value = ""; // Clear input
+        }
+      });
+
+      // Handle Abhijeet sending a message
+      abhijeetSendButton.addEventListener("click", () => {
+        const message = abhijeetMessageInput.value.trim();
+        if (message) {
+          const timestamp = new Date().toLocaleTimeString();
+          socket.emit("chat-message", { username: "Abhijeet", message, timestamp });
+          abhijeetMessageInput.value = ""; // Clear input
+        }
+      });
+
+      // Listen for incoming messages from the server
+      socket.on("chat-message", ({ username, message, timestamp }) => {
+        appendMessage(username, message, timestamp); // Display message in both panels
+      });
+    </script>
+  </body>
+</html>
