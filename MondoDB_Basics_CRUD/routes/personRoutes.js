@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Person = require('../models/person');
+const { find } = require('../models/menu');
 
 router.get('/hotel', (req, res) => {
     res.send('Welcome to Hotel Management System');
@@ -69,5 +70,44 @@ router.get('/:worktype', async (req, res) => {
 
     }
 });
+
+
+//UPDATE:
+router.put('/:id', async (req, res) => {
+    try {
+        const findId = req.params.id;
+        const updatedPersonData = req.body;
+        const response = await Person.findByIdAndUpdate(findId, updatedPersonData, { new: true, runValidators: true });
+
+        if (!response) {
+            return res.status(404).json({ error: 'Person not found' });
+        }
+        console.log('Data Updated');
+        res.status(200).json({ response });
+    }
+    catch (err) {
+        console.log(`ERROR: ${err}`);
+        res.status(500).json(`${err}: Internal Server Error`);
+    }
+});
+
+router.delete('/:id', async (req, res) => {
+    try {
+        const findId = req.params.id;
+        const response = await Person.findByIdAndUpdate(findId);
+
+        if (!response) {
+            return res.status(404).json({ error: "Id is not found" });
+        }
+
+        console.log('Data Deleted!');
+
+    }
+    catch (err) {
+        console.log(`ERRO: ${err}`);
+        res.status(500).json(`${err}: Internal Error`);
+
+    }
+})
 
 module.exports = router; 

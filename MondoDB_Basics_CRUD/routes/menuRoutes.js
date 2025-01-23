@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const MenuItem = require('../models/menu');
-const menuItem = require('../models/menu');
-//GET ALL MENU ITEM:
 
+//GET ALL MENU ITEM:
 router.get('/', async (req, res) => {
     try {
         let allItem = await MenuItem.find();
@@ -24,7 +23,6 @@ router.post('/', async (req, res) => {
         const AddMenu = new MenuItem(data);
         const saved = await AddMenu.save();
         console.log('Item Added Successfully');
-
         res.status(200).json({ saved })
     }
     catch (err) {
