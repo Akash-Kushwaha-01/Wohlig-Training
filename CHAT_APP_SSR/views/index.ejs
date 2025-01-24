@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="text-center">Two-Panel Chat App</h1>
+      <div class="row">
+        <!-- User 1 Panel -->
+        <div class="col">
+          <h3 class="text-center">User 1</h3>
+          <div id="user1-chat" class="chat-panel"></div>
+          <div class="input-group">
+            <input
+              type="text"
+              id="user1-message"
+              class="form-control"
+              placeholder="User 1: Enter your message..."
+            />
+            <button id="user1-send" class="btn">Send</button>
+          </div>
+        </div>
+
+        <!-- User 2 Panel -->
+        <div class="col">
+          <h3 class="text-center">User 2</h3>
+          <div id="user2-chat" class="chat-panel"></div>
+          <div class="input-group">
+            <input
+              type="text"
+              id="user2-message"
+              class="form-control"
+              placeholder="User 2: Enter your message..."
+            />
+            <button id="user2-send" class="btn">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Socket.IO client library -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+
+      // DOM Elements for User 1
+      const user1Chat = document.getElementById("user1-chat");
+      const user1MessageInput = document.getElementById("user1-message");
+      const user1SendButton = document.getElementById("user1-send");
+
+      // DOM Elements for User 2
+      const user2Chat = document.getElementById("user2-chat");
+      const user2MessageInput = document.getElementById("user2-message");
+      const user2SendButton = document.getElementById("user2-send");
+
+      // Append a message to the appropriate chat panel
+      function appendMessage(sender, message, timestamp) {
+        const p = document.createElement("p");
+        p.innerHTML = `<b>${sender}:</b> ${message} <small>(${timestamp})</small>`;
+
+        // Show all messages in both panels
+        user1Chat.appendChild(p.cloneNode(true));
+        user2Chat.appendChild(p);
+        user1Chat.scrollTop = user1Chat.scrollHeight;
+        user2Chat.scrollTop = user2Chat.scrollHeight;
+      }
+
+      // Handle User 1 sending a message
+      user1SendButton.addEventListener("click", () => {
+        const message = user1MessageInput.value.trim();
+        if (message) {
+          const timestamp = new Date().toLocaleTimeString();
+          socket.emit("chat-message", { sender: "User 1", message, timestamp });
+          user1MessageInput.value = ""; // Clear input field
+        }
+      });
+
+      // Handle User 2 sending a message
+      user2SendButton.addEventListener("click", () => {
+        const message = user2MessageInput.value.trim();
+        if (message) {
+          const timestamp = new Date().toLocaleTimeString();
+          socket.emit("chat-message", { sender: "User 2", message, timestamp });
+          user2MessageInput.value = ""; // Clear input field
+        }
+      });
+
+      // Listen for incoming messages
+      socket.on("chat-message", ({ sender, message, timestamp }) => {
+        appendMessage(sender, message, timestamp);
+      });
+    </script>
+  </body>
+</html>
