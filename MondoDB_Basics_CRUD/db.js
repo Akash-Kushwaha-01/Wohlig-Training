@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
-const mongoURL = 'mongodb://localhost:27017/myDB_Practice';
+require('dotenv').config();
+// const mongoURL = process.env.MongoDB_URL_Local;
+const mongoURL = process.env.MongoDB_URL;
+
 mongoose
     .connect(mongoURL)
     .then(() => console.log('Database Connected'))
@@ -14,8 +17,8 @@ db.on('connected', () => {
     console.log('Connected to MongoDB Server');
 })
 
-db.on('error', () => {
-    console.err('MongoDB connection error:', err);
+db.on('error', (ERROR) => {
+    console.log('MongoDB connection error:', ERROR);
 })
 
 db.on('disconnected', () => {

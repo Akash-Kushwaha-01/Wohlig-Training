@@ -3,8 +3,13 @@ const router = express.Router();
 const Person = require('../models/person');
 const { find } = require('../models/menu');
 
-router.get('/hotel', (req, res) => {
-    res.send('Welcome to Hotel Management System');
+router.get('/welcome', async (req, res) => {
+    try {
+        res.status(200).json('Welcome to Hotel Managment');
+    }
+    catch (err) {
+        res.status(500).json({ ERROR: err });
+    }
 })
 
 router.post('/', async (req, res) => {
